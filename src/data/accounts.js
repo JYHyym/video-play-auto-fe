@@ -18,7 +18,7 @@ const students = [
     school: '【青书】'
   },
   {
-    account: '2241001208072',
+    account: '2141001469329', // 2241001208072 2141001469329
     psw: 'Ouchn@2021',
     link: 'https://menhu.pt.ouchn.cn/',
     school: '【国开】'
