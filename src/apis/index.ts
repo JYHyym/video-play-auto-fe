@@ -14,6 +14,19 @@ export default {
         data: params.query
       })
     },
+    postStart(params: {query: {
+      link: string,
+      account: string,
+      psw: string,
+      courseElList: any,
+      $page: any
+    }}){
+      return API({
+        method: 'post',
+        url: '/startCourse',
+        data: params.query
+      })
+    },
     // 获取qpm图表数据
     getDNSQPM (params: {query: {
       page?: number,

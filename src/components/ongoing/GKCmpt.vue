@@ -40,7 +40,7 @@ const loginClick = async (index: number, row: any) => {
       account: row.account,
       psw: row.psw
     }})
-    if(res?.data.code === 1) {
+    if(res?.data?.code === 1) {
       ElNotification.success({
         title: '提示',
         message: '账号登录成功！',
@@ -49,6 +49,10 @@ const loginClick = async (index: number, row: any) => {
 
       // 登录成功后登录按钮禁止点击
       tableData.value[index].loginBtnDis = true
+      // 课程进度信息
+      tableData.value[index].courseListInfo = res?.data?.courseListInfo
+      tableData.value[index].courseElList = res?.data?.courseElList
+      tableData.value[index].$page = res?.data?.$page
     }
     console.log(tableData.value, row, res)
   } catch (error) {
@@ -56,7 +60,33 @@ const loginClick = async (index: number, row: any) => {
   }
 }
 
-const startClick = async (index: number, row: any) => {}
+const startClick = async (index: number, row: any) => {
+  try {
+    const res = await apis.linkInfo.postStart({query: {
+      link: row.link,
+      account: row.account,
+      psw: row.psw,
+      courseElList: row.courseElList,
+      $page: row.$page
+    }})
+    if(res?.data.code === 1) {
+      ElNotification.success({
+        title: '提示',
+        message: '开始刷课！',
+        showClose: false,
+      })
+
+      // // 登录成功后登录按钮禁止点击
+      // tableData.value[index].loginBtnDis = true
+      // // 课程进度信息
+      // tableData.value[index].courseListInfo = res?.data?.courseListInfo
+      // tableData.value[index].courseElList = res?.data?.courseElList
+    }
+    console.log(tableData.value, row, res)
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 const stopClick = async (index: number, row: any) => {}
 
@@ -107,6 +137,15 @@ const submitUpload = () => {
     </div>
     
     <el-table :data="tableData" stripe height="calc(100vh - 80px)" style="width: 100%">
+      <el-table-column type="expand">
+        <template #default="props">
+          <div m="4" v-if="props.row.courseListInfo.length">
+            <div m="t-0 b-2" v-for="(item, index) in props.row.courseListInfo" :key="index">
+              <span>课程名称: {{ item.courseName }}</span> <span>进度：{{ item.process }}</span>
+            </div>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column prop="index" label="序号" width="80" />
       <el-table-column prop="account" label="姓名" />
       <el-table-column prop="account" label="账号" />
@@ -123,8 +162,20 @@ const submitUpload = () => {
             @click="loginClick(scope.$index, scope.row)" 
             :disabled="scope.row.loginBtnDis"
           >登录</el-button>
-          <el-button link type="primary" size="small" @click="startClick(scope.$index, scope.row)">开始</el-button>
-          <el-button link type="primary" size="small" @click="stopClick(scope.$index, scope.row)">暂停</el-button>
+          <el-button 
+            link 
+            type="primary" 
+            size="small" 
+            @click="startClick(scope.$index, scope.row)"
+            :disabled="!scope.row.loginBtnDis"
+          >开始</el-button>
+          <el-button 
+            link 
+            type="primary" 
+            size="small" 
+            @click="stopClick(scope.$index, scope.row)"
+            :disabled="!scope.row.loginBtnDis"
+          >暂停</el-button>
         </template>
       </el-table-column>
     </el-table>
