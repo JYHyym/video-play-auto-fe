@@ -24,6 +24,12 @@ const students = [
     school: '【国开】'
   },
   {
+    account: '2241001208072', // 2241001208072 2141001469329
+    psw: 'Ouchn@2021',
+    link: 'https://menhu.pt.ouchn.cn/',
+    school: '【国开】'
+  },
+  {
     account: '410325198605270019',
     psw: '270019',
     link: 'https://jjad.henu.edu.cn/np/#/login',
